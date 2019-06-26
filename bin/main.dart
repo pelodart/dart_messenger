@@ -2,5 +2,7 @@ import '../lib/messenger_test.dart';
 
 void main() {
   // testUserRepository();
-  testMessengerService();
+  // testMessenger01();
+  testMessenger02();
+  // testPriorityMessenger();
 }

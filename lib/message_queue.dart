@@ -27,13 +27,38 @@ class MessageQueue {
     return found;
   }
 
-  List<Message> allMessagesForUser(String name) {
+  List<Message> removeMessages(String name) {
     List<Message> result = List<Message>();
+    // first pass: collect messages
     for (int i = 0; i < _messages.length; i++) {
       if (_messages[i].recipientEquals(name)) {
         result.add(_messages[i]);
       }
     }
+
+    // second pass: remove messages
+    for (int i = 0; i < result.length; i++) {
+      _messages.remove(result[i]);
+    }
+
     return result;
+  }
+}
+
+class PriorityMessageQueue extends MessageQueue {
+  @override
+  Message removeMessage(String name) {
+    // first pass: search for priority messages
+    for (int i = 0; i < _messages.length; i++) {
+      if (_messages[i].recipientEquals(name)) {
+        if (_messages[i] is PriorityMessage) {
+          Message found = _messages[i];
+          _messages.removeAt(i);
+          return found;
+        }
+      }
+    }
+    // second pass: search for regular messages, if any
+    return super.removeMessage(name);
   }
 }
