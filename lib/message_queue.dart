@@ -16,41 +16,9 @@ class MessageQueue {
   }
 
   Message removeMessage(String name) {
-    Message found = null;
-    for (int i = 0; i < _messages.length; i++) {
-      if (_messages[i].recipientEquals(name)) {
-        found = _messages[i];
-        _messages.removeAt(i);
-        break;
-      }
-    }
-    return found;
-  }
-
-  List<Message> removeMessages(String name) {
-    List<Message> result = List<Message>();
-    // first pass: collect messages
-    for (int i = 0; i < _messages.length; i++) {
-      if (_messages[i].recipientEquals(name)) {
-        result.add(_messages[i]);
-      }
-    }
-
-    // second pass: remove messages
-    for (int i = 0; i < result.length; i++) {
-      _messages.remove(result[i]);
-    }
-
-    return result;
-  }
-}
-
-class PriorityMessageQueue extends MessageQueue {
-  @override
-  Message removeMessage(String name) {
     // first pass: search for priority messages
     for (int i = 0; i < _messages.length; i++) {
-      if (_messages[i].recipientEquals(name)) {
+      if (_messages[i].Recipient == name) {
         if (_messages[i] is PriorityMessage) {
           Message found = _messages[i];
           _messages.removeAt(i);
@@ -59,6 +27,22 @@ class PriorityMessageQueue extends MessageQueue {
       }
     }
     // second pass: search for regular messages, if any
-    return super.removeMessage(name);
+    for (int i = 0; i < _messages.length; i++) {
+      if (_messages[i].Recipient == name) {
+        Message found = _messages[i];
+        _messages.removeAt(i);
+        return found;
+      }
+    }
+    return null;
+  }
+
+  List<Message> removeMessages(String name) {
+    List<Message> result = List<Message>();
+    Message msg;
+    while ((msg = removeMessage(name)) != null) {
+      result.add(msg);
+    }
+    return result;
   }
 }

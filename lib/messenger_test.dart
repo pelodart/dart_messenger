@@ -15,8 +15,15 @@ void testUserRepository() {
   print(testRepository);
 }
 
+void testMessages() {
+  PriorityMessage msg1 = PriorityMessage('Hans', 'Sepp', "What's going on ...");
+  RegularMessage msg2 = RegularMessage('Sepp', 'Hans', 'Nothing !');
+  print(msg1);
+  print(msg2);
+}
+
 void testMessenger01() {
-  PriorityMessenger myMessenger = PriorityMessenger();
+  Messenger myMessenger = Messenger();
   Message msg;
 
   myMessenger.registerUser("Franz");
@@ -36,7 +43,28 @@ void testMessenger01() {
 }
 
 void testMessenger02() {
-  PriorityMessenger myMessenger = PriorityMessenger();
+  Messenger myMessenger = Messenger();
+  Message msg;
+
+  myMessenger.registerUser("Franz");
+  myMessenger.registerUser("Susan");
+
+  myMessenger.send("Franz", "Susan", "1. Message");
+  myMessenger.sendPrio("Franz", "Susan", "2. Message");
+  myMessenger.send("Franz", "Susan", "3. Message");
+  myMessenger.sendPrio("Franz", "Susan", "4. Message");
+  myMessenger.send("Franz", "Susan", "5. Message");
+  myMessenger.sendPrio("Franz", "Susan", "6. Message");
+  myMessenger.send("Franz", "Susan", "7. Message");
+  myMessenger.sendPrio("Franz", "Susan", "8. Message");
+
+  while ((msg = myMessenger.receive("Susan")) != null) {
+    print(msg);
+  }
+}
+
+void testMessenger03() {
+  Messenger myMessenger = Messenger();
   myMessenger.registerUser("Franz");
   myMessenger.registerUser("Susan");
   myMessenger.registerUser("Sepp");
@@ -44,40 +72,14 @@ void testMessenger02() {
   myMessenger.send("Franz", "Susan", "1. Message");
   myMessenger.send("Franz", "Sepp", "2. Message");
   myMessenger.send("Franz", "Susan", "3. Message");
-  myMessenger.send("Franz", "Sepp", "4. Message");
+  myMessenger.sendPrio("Franz", "Sepp", "4. Message");
   myMessenger.send("Franz", "Susan", "5. Message");
   myMessenger.send("Franz", "Sepp", "6. Message");
   myMessenger.send("Franz", "Susan", "7. Message");
-  myMessenger.send("Franz", "Sepp", "8. Message");
+  myMessenger.sendPrio("Franz", "Sepp", "8. Message");
 
   List<Message> messagesForSepp = myMessenger.receiveAllMessages('Sepp');
   for (Message message in messagesForSepp) {
     print("Received: ${message}");
   }
-}
-
-void testPriorityMessenger() {
-  PriorityMessenger myMessenger = PriorityMessenger();
-  Message msg;
-
-  myMessenger.registerUser("Franz");
-  myMessenger.registerUser("Susan");
-
-  myMessenger.send("Franz", "Susan", "1. Message");
-  myMessenger.send("Franz", "Susan", "2. Message");
-  myMessenger.sendPrio("Franz", "Susan", "3. Message");
-  myMessenger.sendPrio("Franz", "Susan", "4. Message");
-  myMessenger.send("Franz", "Susan", "5. Message");
-  myMessenger.send("Franz", "Susan", "6. Message");
-
-  while ((msg = myMessenger.receive("Susan")) != null) {
-    print(msg);
-  }
-
-  // msg = myMessenger.receive("Susan");
-  // print("Received: ");
-  // print(msg);
-  // msg = myMessenger.receive("Susan");
-  // print("Received: ");
-  // print(msg);
 }

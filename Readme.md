@@ -1,7 +1,6 @@
 # Ein einfacher Nachrichten-Messenger in Dart
 
-In dieser Aufgabe betrachten wir einen einfachen Nachrichten-Messenger im Sinne der bekannten Smartphone-Apps WhatsApp- oder Facebook-Messenger. Neben dem reinen Versenden von Nachrichten besitzt der Dart-Messenger auch eine Benutzerverwaltung. Beide Teilnehmer (Sender und Empfänger) müssen am Messenger registriert sein, bevor sie Nachrichten senden oder empfangen können.
-Weitere Details entnehmen Sie den nachfolgenden Hinweisen zur Konzeption der einzelnen Dart-Klassen dieser Aufgabe.
+In dieser Aufgabe betrachten wir einen einfachen Nachrichten-Messenger im Sinne der bekannten Smartphone-Apps WhatsApp- oder Facebook-Messenger. Neben dem reinen Versenden von Nachrichten besitzt der Dart-Messenger auch eine Benutzerverwaltung. Beide Teilnehmer (Sender und Empfänger) müssen am Messenger registriert sein, bevor sie Nachrichten senden oder empfangen können. Nachrichten gibt es in zwei Ausprägungen: Normale Nachrichten und Nachrichten mit Priorität. Sind einem Emfänger eine normale und eine Nachrichten mit Priorität zugestellt, so ist dem Empfänger beim Abholen als Erstes die Nachrichten mit Priorität auszuhändigen, unabhängig davon, in welcher Reihenfolge bzw. zu welchem Zeitpunkt diese abgesendet wurden. Weitere Details entnehmen Sie den nachfolgenden Hinweisen zur Konzeption der einzelnen Dart-Klassen dieser Aufgabe.
 
 ## Klasse ``UserRepository``
 
@@ -55,30 +54,26 @@ Implementieren Sie eine Klasse ``Message`` mit den drei Eigenschaften ``Sender``
 
 *Hinweis*: Die Anforderung „Name muss in der Benutzerverwaltung vorhanden sein“ können Sie erst zu einem späteren Zeitpunkt in der Realisierung umsetzen.
 
-Ferner besitzt die Klasse eine Methode ``recipientEquals``:
-
-```
-bool recipientEquals(String name);
-```
-
-Die Methode ``recipientEquals`` liefert ``true`` zurück, wenn der übergebene Parameter ``name`` gleich dem Empfängernamen in der Nachricht ist, andernfalls ``false``.
-
-
 ## Nachrichten mit und ohne Priorität
 
 Modellieren Sie zwei Klassen ``RegularMessage`` und ``PriorityMessage``, die beide eine Spezialisierung der Klasse ``Message`` darstellen. Im Idealfall lässt es Ihre Realisierung zu, dass nur Objekte dieser beiden Klassen mit ``new`` angelegt werden können, also keine ``Message``-Objekte.
 
-
 *Testrahmen*:
 
 ```dart
-TODO
+void testMessages() {
+  PriorityMessage msg1 = PriorityMessage('Hans', 'Sepp', "What's going on ...");
+  RegularMessage msg2 = RegularMessage('Sepp', 'Hans', 'Nothing !');
+  print(msg1);
+  print(msg2);
+}
 ```
 
 *Ausgabe*:
 
 ```
-TODO
+Priority Message ==> Sender: Hans, Recipient: Sepp, Text: What's going on ...
+Regular  Message --> Sender: Sepp, Recipient: Hans, Text: Nothing !
 ```
 
 ## Klasse ``MessageQueue``
@@ -90,7 +85,7 @@ Kernstück des Messengers ist die Klasse ``MessageQueue``. In einem Objekt dies
 | Konstruktor | ``MessageQueue();``<br/> Legt ein leeres ``MessageQueue``-Objekt an.|
 | *getter* ``Count`` | ``int get Count`` <br/> Liefert die Anzahl aller Nachrichten im ``MessageQueue``-Objekt zurück.|
 | Methode ``addMessage`` | ``void addMessage(Message message);`` <br/> Legt im ``MessageQueue``-Objekt eine Nachricht ab.|
-| Methode ``removeMessage`` | ``Message removeMessage (String name);`` <br/> Entfernt im ``MessageQueue``-Objekt eine Nachricht, deren Empfänger durch den Parameter ``name`` vorgegeben ist und liefert diese durch den Rückgabeparameter zurück. Liegt für den Empfänger ``name`` keine Nachricht vor, liefert die Methode den Wert ``null`` zurück.|
+| Methode ``removeMessage`` | ``Message removeMessage (String name);`` <br/> Entfernt im ``MessageQueue``-Objekt eine Nachricht, deren Empfänger durch den Parameter ``name`` vorgegeben ist und liefert diese durch den Rückgabeparameter zurück. Liegt für den Empfänger ``name`` keine Nachricht vor, liefert die Methode den Wert ``null`` zurück. Liegen für den Empänger sowohl normale als auch Nachrichten mit Priorität vor, so sind zuerst alle Nachrichten mit Priorität zu entfernen. Wird eine normale Nachricht entfernt, darf zu diesem Zeitpunkt keine Nachricht mit Priorität in der Nachrichtenwarteschlange sein! |
 | Methode ``removeMessages`` | ``List<Message> removeMessages(String name);`` <br/> Liefert eine Liste mit allen Nachrichten zurück, die dem Empfänger ``name`` zugewiesen sind.|
 
 Tabelle 2. Zentrale Elemente der Klasse ``MessageQueue``.
@@ -110,13 +105,16 @@ Alle Methoden der ``Messenger``-Klasse, die sich auf die Verwaltung der Benutzer
 | Konstruktor | ``Messenger();``<br/> Legt ein leeres ``Messenger``-Objekt an.|
 | Methode ``registerUser`` | ``bool registerUser(String name);`` <br/> Meldet einen Benutzer mit dem Benutzernamen ``name`` in der Benutzerverwaltung des Nachrichtendienstes an. Ist der Name bereits vergeben, liefert die Methode ``false`` zurück, andernfalls ``true``.|
 | Methode ``unregisterUser`` | ``bool unregisterUser(String name);`` <br/> Meldet einen Benutzer mit dem Benutzernamen ``name`` in der Benutzerverwaltung des Nachrichtendienstes ab. Kann der Name nicht gefunden werden, liefert die Methode ``false`` zurück, andernfalls ``true``.|
-| Methode ``send`` | ``bool send (String from, String to, String text);`` <br/> Sendet eine Nachricht ``text`` mit Absender ``from`` an den Empfänger ``to``. An Hand der Parameter wird ein ``Message``-Objekt angelegt und im ``MessageQueue``-Unterobjekt abgelegt. Sender und Empfänger müssen in der Benutzerverwaltung registriert sein.|
+| Methode ``send`` | ``bool send (String from, String to, String text);`` <br/> Sendet eine Nachricht ``text`` mit Absender ``from`` an den Empfänger ``to``. An Hand der Parameter wird ein ``RegularMessage``-Objekt angelegt und im ``MessageQueue``-Unterobjekt abgelegt. Sender und Empfänger müssen in der Benutzerverwaltung registriert sein.|
+| Methode ``sendPrio`` | ``bool sendPrio(String from, String to, String text);`` <br/> Siehe Beschreibung der ``send``-Methode mit dem Unterschied, dass ein ``PriorityMessage``-Objekt erzeugt wird.|
 | Methode ``receive`` | ``Message receive (String name);`` <br/> Pro Aufruf der ``receive``-Methode wird einem Empfänger (mit Namen ``name``) eine Nachricht zugestellt. Die Nachricht muss im ``MessageQueue``-Unterobjekt abgelegt sein. Liegt für den Empfänger keine Nachricht vor, liefert die Methode den Wert ``null`` zurück.|
 | Methode ``receiveAllMessages`` | ``List<Message> receiveAllMessages(String name);`` <br/> Ein Aufruf der ``receiveAllMessages``-Methode liedert alle Nachrichten zurück, die dem Empfänger (mit Namen ``name``) zugestellt sind.|
 
 Tabelle 3. Zentrale Elemente der Klasse ``Messenger``.
 
-*Testrahmen* 1:
+Es folgen mehrere Testbeispiele, um die einzelnen Funktionalitäten der ``Messenger``-Klasse aufzuzeigen:
+
+*Testrahmen* 1: Versenden und Empfangen von normalen Nachrichten
 
 ```dart
 void testMessenger() {
@@ -146,15 +144,53 @@ void testMessenger() {
 Sending: From: Franz, To: Susan, Text: [First Message]
 Sending: From: Franz, To: Susan, Text: [Second Message]
 Received:
-Sender: Franz, Recipient: Susan, Text: First Message
+Regular  Message --> Sender: Franz, Recipient: Susan, Text: First Message
 Received: 
-Sender: Franz, Recipient: Susan, Text: Second Message
+Regular  Message --> Sender: Franz, Recipient: Susan, Text: Second Message
 ```
 
-*Testrahmen* 2 (Methode ``receiveAllMessages``):
+*Testrahmen* 2: Versenden und Empfangen von sowohl normalen Nachrichten als auch Nachrichten mit Priorität
 
 ```dart
-void testMessenger2() {
+void testMessenger() {
+  Messenger myMessenger = Messenger();
+  Message msg;
+
+  myMessenger.registerUser("Franz");
+  myMessenger.registerUser("Susan");
+
+  myMessenger.send("Franz", "Susan", "1. Message");
+  myMessenger.sendPrio("Franz", "Susan", "2. Message");
+  myMessenger.send("Franz", "Susan", "3. Message");
+  myMessenger.sendPrio("Franz", "Susan", "4. Message");
+  myMessenger.send("Franz", "Susan", "5. Message");
+  myMessenger.sendPrio("Franz", "Susan", "6. Message");
+  myMessenger.send("Franz", "Susan", "7. Message");
+  myMessenger.sendPrio("Franz", "Susan", "8. Message");
+
+  while ((msg = myMessenger.receive("Susan")) != null) {
+    print(msg);
+  }
+}
+```
+
+*Ausgabe*:
+
+```
+Priority Message ==> Sender: Franz, Recipient: Susan, Text: 2. Message
+Priority Message ==> Sender: Franz, Recipient: Susan, Text: 4. Message
+Priority Message ==> Sender: Franz, Recipient: Susan, Text: 6. Message
+Priority Message ==> Sender: Franz, Recipient: Susan, Text: 8. Message
+Regular  Message --> Sender: Franz, Recipient: Susan, Text: 1. Message
+Regular  Message --> Sender: Franz, Recipient: Susan, Text: 3. Message
+Regular  Message --> Sender: Franz, Recipient: Susan, Text: 5. Message
+Regular  Message --> Sender: Franz, Recipient: Susan, Text: 7. Message
+```
+
+*Testrahmen* 3: Test der Methode ``receiveAllMessages``):
+
+```dart
+void testMessenger() {
   Messenger myMessenger = Messenger();
   myMessenger.registerUser("Franz");
   myMessenger.registerUser("Susan");
@@ -163,11 +199,11 @@ void testMessenger2() {
   myMessenger.send("Franz", "Susan", "1. Message");
   myMessenger.send("Franz", "Sepp", "2. Message");
   myMessenger.send("Franz", "Susan", "3. Message");
-  myMessenger.send("Franz", "Sepp", "4. Message");
+  myMessenger.sendPrio("Franz", "Sepp", "4. Message");
   myMessenger.send("Franz", "Susan", "5. Message");
   myMessenger.send("Franz", "Sepp", "6. Message");
   myMessenger.send("Franz", "Susan", "7. Message");
-  myMessenger.send("Franz", "Sepp", "8. Message");
+  myMessenger.sendPrio("Franz", "Sepp", "8. Message");
 
   List<Message> messagesForSepp = myMessenger.receiveAllMessages('Sepp');
   for (Message message in messagesForSepp) {
@@ -179,9 +215,9 @@ void testMessenger2() {
 *Ausgabe*:
 
 ```
-Received: Sender: Franz, Recipient: Sepp, Text: 2. Message
-Received: Sender: Franz, Recipient: Sepp, Text: 4. Message
-Received: Sender: Franz, Recipient: Sepp, Text: 6. Message
-Received: Sender: Franz, Recipient: Sepp, Text: 8. Message
+Received: Priority Message ==> Sender: Franz, Recipient: Sepp, Text: 4. Message
+Received: Priority Message ==> Sender: Franz, Recipient: Sepp, Text: 8. Message
+Received: Regular  Message --> Sender: Franz, Recipient: Sepp, Text: 2. Message
+Received: Regular  Message --> Sender: Franz, Recipient: Sepp, Text: 6. Message
 ```
 

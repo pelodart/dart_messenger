@@ -13,11 +13,6 @@ abstract class Message {
   String get Recipient => _recipient;
   String get Text => _text;
 
-  // public interface
-  bool recipientEquals(String name) {
-    return _recipient == name;
-  }
-
   @override
   String toString() {
     return 'Sender: ${_sender}, Recipient: ${_recipient}, Text: ${_text}';
