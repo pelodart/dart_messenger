@@ -1,6 +1,10 @@
 # Ein einfacher Nachrichten-Messenger in Dart
 
-In dieser Aufgabe betrachten wir einen einfachen Nachrichten-Messenger im Sinne der bekannten Smartphone-Apps WhatsApp- oder Facebook-Messenger. Neben dem reinen Versenden von Nachrichten besitzt der Dart-Messenger auch eine Benutzerverwaltung. Beide Teilnehmer (Sender und Empfänger) müssen am Messenger registriert sein, bevor sie Nachrichten senden oder empfangen können. Nachrichten gibt es in zwei Ausprägungen: Normale Nachrichten und Nachrichten mit Priorität. Sind einem Emfänger eine normale und eine Nachrichten mit Priorität zugestellt, so ist dem Empfänger beim Abholen als Erstes die Nachrichten mit Priorität auszuhändigen, unabhängig davon, in welcher Reihenfolge bzw. zu welchem Zeitpunkt diese abgesendet wurden. Weitere Details entnehmen Sie den nachfolgenden Hinweisen zur Konzeption der einzelnen Dart-Klassen dieser Aufgabe.
+In dieser Aufgabe betrachten wir einen einfachen Nachrichten-Messenger im Sinne der bekannten Smartphone-Apps WhatsApp- oder Facebook-Messenger. Neben dem reinen Versenden von Nachrichten besitzt der Dart-Messenger auch eine Benutzerverwaltung.
+
+Beide Teilnehmer (Sender und Empfänger) müssen am Messenger registriert sein, bevor sie Nachrichten senden oder empfangen können. Nachrichten gibt es in zwei Ausprägungen: Normale Nachrichten und Nachrichten mit Priorität. Sind einem Emfänger eine normale und eine Nachrichten mit Priorität zugestellt, so ist ihm beim Abholen als Erstes die Nachricht mit Priorität auszuhändigen, unabhängig davon, in welcher Reihenfolge bzw. zu welchem Zeitpunkt beide Nachrichten abgesendet wurden.
+
+Weitere Details entnehmen Sie den nachfolgenden Hinweisen zur Konzeption der einzelnen Dart-Klassen dieser Aufgabe.
 
 ## Klasse ``UserRepository``
 
@@ -220,4 +224,3 @@ Received: Priority Message ==> Sender: Franz, Recipient: Sepp, Text: 8. Message
 Received: Regular  Message --> Sender: Franz, Recipient: Sepp, Text: 2. Message
 Received: Regular  Message --> Sender: Franz, Recipient: Sepp, Text: 6. Message
 ```
-
