@@ -2,7 +2,7 @@
 
 In dieser Aufgabe betrachten wir einen einfachen Nachrichten-Messenger im Sinne der bekannten Smartphone-Apps WhatsApp- oder Facebook-Messenger. Neben dem reinen Versenden von Nachrichten besitzt der Dart-Messenger auch eine Benutzerverwaltung.
 
-Beide Teilnehmer (Sender und Empfänger) müssen am Messenger registriert sein, bevor sie Nachrichten senden oder empfangen können. Nachrichten gibt es in zwei Ausprägungen: Normale Nachrichten und Nachrichten mit Priorität. Sind einem Emfänger eine normale und eine Nachrichten mit Priorität zugestellt, so ist ihm beim Abholen als Erstes die Nachricht mit Priorität auszuhändigen, unabhängig davon, in welcher Reihenfolge bzw. zu welchem Zeitpunkt beide Nachrichten abgesendet wurden.
+Beide Teilnehmer (Sender und Empfänger) müssen am Messenger registriert sein, bevor sie Nachrichten senden oder empfangen können. Nachrichten gibt es in zwei Ausprägungen: Normale Nachrichten und Nachrichten mit Priorität. Sind einem Empfänger eine normale und eine Nachricht mit Priorität zugestellt, so ist ihm beim Abholen als Erstes die Nachricht mit Priorität auszuhändigen, unabhängig davon, in welcher Reihenfolge bzw. zu welchem Zeitpunkt beide Nachrichten abgesendet wurden.
 
 Weitere Details entnehmen Sie den nachfolgenden Hinweisen zur Konzeption der einzelnen Dart-Klassen dieser Aufgabe.
 
