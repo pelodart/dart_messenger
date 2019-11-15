@@ -1,0 +1,9 @@
+name: simple_messenger
+version: 1.0.0
+description: >-
+  A very simple console-based implementation of a messages messenger in Dart
+author: PeLo
+dependencies:
+
+environment:
+  sdk: '>=2.0.0 <3.0.0'
